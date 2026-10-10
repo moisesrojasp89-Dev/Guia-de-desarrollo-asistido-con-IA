@@ -4,7 +4,7 @@
 [![Licencia MIT](https://img.shields.io/badge/Código-MIT-blue.svg)](LICENSE)
 [![Documentación CC BY-SA](https://img.shields.io/badge/Docs-CC%20BY--SA%204.0-orange.svg)](LICENSE)
 [![Nivel: Abierto para Todos](https://img.shields.io/badge/Nivel-Principiante%20a%20Senior-success.svg)](#-para-quién-es-este-repositorio)
-[![Sin Humo](https://img.shields.io/badge/Filosofía-Pragmatismo%20Real-purple.svg)](#-1-la-filosofía-de-la-trinchera)
+[![Pragmatismo Real](https://img.shields.io/badge/Filosofía-Pragmatismo%20Real-purple.svg)](#-1-la-filosofía-de-la-trinchera)
 
 > **Mandamiento #1 del Constructor:**  
 > *"Antes de tirar la primera línea de código, diseña en una servilleta: documentación clara, diagramas de flujo y arquitectura básica. Si tú no tienes claro el mapa, la IA inventará un laberinto."*
@@ -121,7 +121,7 @@ Este repositorio es una bitácora abierta y en evolución. Si aprendiste una lec
 
 1. Lee nuestras pautas en [`CONTRIBUTING.md`](CONTRIBUTING.md).
 2. Abre un Issue o un Pull Request.
-3. Ayúdanos a mantener este recurso libre de humo, accesible y con rigor técnico.
+3. Ayúdanos a mantener este recurso pragmático, accesible y con rigor técnico.
 
 ---
 

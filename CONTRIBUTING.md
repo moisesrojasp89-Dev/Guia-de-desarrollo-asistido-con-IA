@@ -1,4 +1,4 @@
-# 🤝 Guía de Contribución: Manteniendo la Guía Real, Útil y Libre de Humo
+# 🤝 Guía de Contribución: Manteniendo la Guía Real, Útil y Pragmática
 
 ¡Gracias por querer sumar a este proyecto abierto! Este repositorio no busca coleccionar teoría abstracta ni inflar el ego de nadie. Nuestra meta es **facilitar el camino a cualquier persona que quiera construir software confiable asistido por Inteligencia Artificial**.
 
