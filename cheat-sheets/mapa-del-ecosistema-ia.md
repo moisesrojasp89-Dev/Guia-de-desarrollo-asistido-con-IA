@@ -17,16 +17,14 @@
 
 ---
 
-## 🧠 2. Modelos de Lenguaje Principales
+## 🧠 2. Familias de Modelos de Lenguaje Principales
 
-| Modelo | Desarrollador | Tipo | Ideal para: |
+| Ecosistema / LLM | Desarrollador | Tipo de Acceso | Especialidad y Puntos Fuertes |
 |---|---|---|---|
-| **Claude 3.7 Sonnet** | Anthropic | Propietario (API) | **El mejor para programar:** máxima precisión, refactorización y respeto a reglas. |
-| **DeepSeek-R1** | DeepSeek | Pesos Abiertos / API | **Razonamiento profundo:** pensamiento explícito (`<think>`) a costo ultra-bajo. |
-| **DeepSeek-V3** | DeepSeek | Pesos Abiertos / API | **Velocidad y economía:** autocompletado y código estándar por fracciones de centavo. |
-| **Gemini 2.5 / 3.0 Flash**| Google | Propietario (API) | **Latencia ultra-baja (<300ms):** chatbots, clasificación y tareas mecánicas masivas. |
-| **Gemini Pro (1M - 2M)** | Google | Propietario (API) | **Contexto gigante:** analizar libros enteros, videos o repositorios de 200 archivos. |
-| **GPT-4o / Serie 'o'** | OpenAI | Propietario (API) | **Uso general y matemáticas:** algoritmos complejos y visión multimodal. |
+| **Claude** | Anthropic | Propietario (API / Chat) | **El estándar de oro para programar:** máxima precisión, refactorización limpia y respeto riguroso a reglas y restricciones. |
+| **DeepSeek** | DeepSeek | Pesos Abiertos / API | **Razonamiento a ultra-bajo costo:** pionero de código abierto con capacidad de pensamiento lógico profundo y ejecución local. |
+| **Gemini** | Google | Propietario (API / Chat) | **Contexto masivo y velocidad:** ventanas de memoria gigantescas (repositorios completos) y respuestas ultra-rápidas. |
+| **ChatGPT / GPT** | OpenAI | Propietario (API / Chat) | **Versatilidad y razonamiento:** ecosistema pionero con fuerte capacidad algorítmica, multimodal y amplio soporte. |
 
 ---
 

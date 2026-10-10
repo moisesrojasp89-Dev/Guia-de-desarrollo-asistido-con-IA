@@ -24,52 +24,52 @@ En la actualidad, cuatro familias de modelos dominan el desarrollo de software a
 
 ---
 
-## 🐋 1. DeepSeek (V3 y R1): El Terremoto de Código Abierto
+## 🐋 1. DeepSeek: El Terremoto de Código Abierto
 
-DeepSeek irrumpió en la industria tecnológica demostrando que se pueden alcanzar niveles de inteligencia comparables a los modelos más costosos de Silicon Valley con una fracción diminuta del costo:
+DeepSeek demostró que se pueden alcanzar niveles de inteligencia y razonamiento de primer orden mundial con una fracción diminuta del costo de la industria:
 
-* **DeepSeek-V3:** Modelo general de lenguaje ultra-eficiente basado en una arquitectura MoE (*Mixture of Experts*). Es extremadamente rápido y económico para autocompletado y generación de código estándar.
-* **DeepSeek-R1 (Modelo de Razonamiento):**  
-  Incorpora **Tokens de Pensamiento Explícito (Chain of Thought)**. Antes de entregarte la respuesta, puedes ver un bloque `<think>...</think>` donde el modelo razona consigo mismo, detecta contradicciones y prueba caminos lógicos alternativos.
-* **Pesos Abiertos (*Open Weights*):** A diferencia de modelos cerrados, puedes descargar modelos destilados de DeepSeek y correrlos en tu propia máquina mediante herramientas como **Ollama** si no quieres depender de internet.
+* **Modelos Abiertos y Eficiencia:** Arquitecturas diseñadas para ofrecer máxima velocidad y costo mínimo en autocompletado y generación de código estándar.
+* **Modelos de Razonamiento:**  
+  Incorporan **Tokens de Pensamiento Explícito (Chain of Thought)**. Antes de entregarte la respuesta final, puedes inspeccionar un bloque de razonamiento interno (`<think>...</think>`) donde el modelo analiza contradicciones, valida hipótesis y descarta fallos lógicos.
+* **Pesos Abiertos (*Open Weights*):** A diferencia de modelos estrictamente cerrados, muchos modelos de su ecosistema pueden descargarse y ejecutarse localmente con herramientas como **Ollama** si buscas privacidad total o trabajo sin conexión.
 
 ---
 
-## 👑 2. Claude (Anthropic - Familia Sonnet y Opus)
+## 👑 2. Claude (Anthropic)
 
-Claude (especialmente **Claude 3.5 y 3.7 Sonnet**) se ha consolidado como el estándar de oro indiscutible para ingenieros de software:
+Claude se ha consolidado entre la comunidad de desarrollo como el estándar de referencia para ingeniería de software:
 
 * **¿Por qué destaca en programación?**
-  1. **Disciplina Constitucional:** Si le dices *"No toques la línea 50"*, no la toca. Otros modelos suelen ignorar las prohibiciones negativas.
-  2. **Refactorización Limpia:** Entiende dependencias entre archivos sin inventar librerías inexistentes ni generar código inflado.
-  3. **Tono Directo:** No satura de introducciones pomposas ni disculpas vacías; va directo al grano técnico.
+  1. **Disciplina Constitucional:** Si en tu `AGENTS.md` le ordenas *"No toques la línea 50"* o *"Usa exclusivamente esta interfaz"*, obedece con rigor. Tiende a no inventar atajos silenciosos.
+  2. **Refactorización Limpia:** Entiende dependencias cruzadas entre archivos sin inventar librerías inexistentes ni generar código inflado.
+  3. **Tono Directo:** Evita introducciones pomposas o disculpas vacías, entregando soluciones quirúrgicas y listas para producción.
 
 ---
 
-## ⚡ 3. Gemini (Google - Familia Flash y Pro)
+## ⚡ 3. Gemini (Google)
 
-Gemini destaca por su infraestructura de datos masiva y su integración nativa:
+Gemini destaca por su infraestructura multimodal nativa y su capacidad de gestión de contexto masivo:
 
-* **Ventana de Contexto Gigante (1 Millón a 2 Millones de Tokens):**  
-  Puedes subir una base de código completa de 200 archivos, manuales en PDF de 500 páginas o videos largos en una sola consulta sin que el modelo sufra amnesia.
-* **Modelos Flash (Flash y Flash-Lite):**  
-  Ofrecen latencias inferiores a **300 milisegundos** y costos que rozan los centavos por millones de tokens, haciéndolos ideales para clasificadores automáticos, chatbots en tiempo real y tareas repetitivas.
-
----
-
-## 🌐 4. OpenAI (Familia GPT-4o y Modelos 'o')
-
-OpenAI sigue siendo el motor de referencia en adopción masiva:
-* **GPT-4o:** Modelo versátil y rápido para tareas generales, traducción y frontend inicial.
-* **Serie 'o' (o1, o3-mini):** Modelos de razonamiento profundo orientados a matemáticas, algoritmos complejos y problemas científicos de alto nivel de abstracción.
+* **Ventana de Contexto Gigante (Millones de Tokens):**  
+  Puedes inyectarle una base de código completa de cientos de archivos, manuales en PDF densos o historiales extensos en una sola consulta sin que sufra de amnesia o descarte información previa.
+* **Familia Flash / Ultraligera:**  
+  Modelos con latencias mínimas (milisegundos) y costos marginales, ideales para clasificadores de datos, asistentes conversacionales en tiempo real y tareas repetitivas de alta demanda.
 
 ---
 
-## 🎯 Cuadro Comparativo: ¿Cuál Elegir para tu Tarea?
+## 🌐 4. ChatGPT / GPT (OpenAI)
 
-| Tarea que vas a realizar | Modelo Recomendado | ¿Por qué? |
+OpenAI sigue siendo el motor de mayor difusión y versatilidad:
+* **Modelos Generales:** Amplia capacidad creativa, estructuración de interfaces, prototipado inicial y traducción.
+* **Modelos de Razonamiento:** Especializados en problemas algorítmicos complejos, demostraciones lógicas y matemáticas profundas.
+
+---
+
+## 🎯 Cuadro Comparativo: ¿Cuál Elegir según la Tarea?
+
+| Tarea que vas a realizar | Familia Recomendada | ¿Por qué? |
 |---|---|---|
-| **Escribir tu SPEC.md y diseñar la arquitectura** | **Claude Sonnet** o **DeepSeek-R1** | Máxima coherencia lógica y cero alucinaciones de estructura. |
-| **Generar código de funciones y pantallas (Mecánico)** | **Gemini Flash** o **DeepSeek-V3** | Velocidad instantánea (<1s) y costo de fracciones de centavo. |
-| **Auditar un error complejo que lleva horas sin salir** | **DeepSeek-R1** o **OpenAI o1** | Su cadena de pensamiento explícita analiza el problema paso a paso. |
-| **Analizar un repositorio o manual gigante de 500 páginas** | **Gemini 2.5/3.0 Pro** | Su ventana de 2 millones de tokens procesa todo el texto en memoria. |
+| **Escribir tu SPEC.md y diseñar la arquitectura** | **Claude** o **DeepSeek** | Máxima coherencia lógica, seguimiento de restricciones y orden estructural. |
+| **Generar código de funciones y pantallas (Mecánico)** | **Gemini** o **DeepSeek** | Velocidad de respuesta casi instantánea y costo mínimo por token. |
+| **Auditar un error complejo o un bug esquivo** | **Modelos de Razonamiento** (DeepSeek / Claude / GPT) | Su capacidad de deducción lógica paso a paso descompone la causa raíz. |
+| **Analizar un repositorio completo o documentación gigante** | **Gemini** | Su ventana de contexto millonaria permite procesar todo el proyecto en una sola llamada. |
