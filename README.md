@@ -34,7 +34,7 @@ Este proyecto fue diseñado con **neutralidad absoluta de casos de uso**. Sirve 
 
 ## 🗺️ Mapa de Ruta Completo del Repositorio
 
-El contenido está dividido en **12 módulos progresivos**, acompañados de plantillas listas para copiar y pegar y hojas de trucos rápidos.
+El contenido está dividido en **13 módulos progresivos**, acompañados de plantillas listas para copiar y pegar y hojas de trucos rápidos.
 
 ```mermaid
 flowchart TD
@@ -49,7 +49,8 @@ flowchart TD
     M8 --> M9["9. Harness Engineering\n(Modelo + Arnés & Guardrails)"]
     M9 --> M10["10. Arquitectura Limpia\n(Anti-Monolito de 3,000 líneas)"]
     M10 --> M11["11. Auto-Aprendizaje & Calidad\n(5-Whys y Quality Gates)"]
-    M11 --> PROD["🚀 PUESTA EN PRODUCCIÓN CONFIABLE"]
+    M11 --> M12["12. El Ecosistema de Herramientas\n(Cursor, Antigravity, OpenRouter, APIs)"]
+    M12 --> PROD["🚀 PUESTA EN PRODUCCIÓN CONFIABLE"]
 ```
 
 ---
@@ -70,6 +71,7 @@ flowchart TD
 | **[09. Harness Engineering y Lógica Robusta](docs/09-harness-engineering-y-logica-robusta/)** | La fórmula Modelo + Harness, Máquinas de Estado Finito, Guardrails por código y Progressive Disclosure. | • [01. La fórmula Modelo + Harness](docs/09-harness-engineering-y-logica-robusta/01-la-formula-modelo-mas-harness.md)<br>• [02. Máquinas de estado en flujos de negocio](docs/09-harness-engineering-y-logica-robusta/02-maquinas-de-estado-en-flujos-de-negocio.md)<br>• [03. Guardrails por código vs texto](docs/09-harness-engineering-y-logica-robusta/03-guardrails-por-codigo-vs-guardrails-por-texto.md)<br>• [04. Gestión de contexto progresivo](docs/09-harness-engineering-y-logica-robusta/04-gestion-de-contexto-y-progressive-disclosure.md) |
 | **[10. Arquitectura Limpia y Modularidad](docs/10-arquitectura-limpia-y-modularidad/)** | Cómo evitar el archivo monstruo de 3,000 líneas, pureza de imports sin efectos secundarios y separación. | • [01. El archivo monstruo y cómo evitarlo](docs/10-arquitectura-limpia-y-modularidad/01-como-evitar-el-archivo-monstruo-de-3000-lineas.md)<br>• [02. Pureza de importación (Zero Side-Effects)](docs/10-arquitectura-limpia-y-modularidad/02-pureza-de-importacion-cero-efectos-colaterales.md)<br>• [03. Separación de responsabilidades](docs/10-arquitectura-limpia-y-modularidad/03-separacion-de-responsabilidades.md) |
 | **[11. Auto-Aprendizaje y Calidad](docs/11-auto-aprendizaje-y-calidad/)** | La técnica de los 5-Whys para bugs, catálogo persistente de errores, pruebas <5s con mocks y Quality Gates. | • [01. Técnica de los 5-Porqués](docs/11-auto-aprendizaje-y-calidad/01-la-tecnica-de-los-5-porques-para-bugs.md)<br>• [02. Catálogo de errores persistente](docs/11-auto-aprendizaje-y-calidad/02-catalogo-de-errores-persistente.md)<br>• [03. Pruebas sub-5 segundos con mocks](docs/11-auto-aprendizaje-y-calidad/03-pruebas-rapidas-sub-5-segundos-con-mocks.md)<br>• [04. Quality Gates en 1 solo comando](docs/11-auto-aprendizaje-y-calidad/04-quality-gates-en-un-solo-comando.md) |
+| **[12. El Ecosistema de Herramientas y Harnesses](docs/12-el-ecosistema-de-herramientas-y-harnesses/)** | 🛠️ APIs vs Suscripciones, OpenRouter, DeepSeek vs Claude vs Gemini, Cursor, Antigravity, Claude Code y Multiagentes (Orca). | • [01. ¿Qué es una API y cómo se paga?](docs/12-el-ecosistema-de-herramientas-y-harnesses/01-que-es-una-api-y-como-se-paga-tokens-vs-suscripcion.md)<br>• [02. ¿Qué es OpenRouter? El mercado central](docs/12-el-ecosistema-de-herramientas-y-harnesses/02-que-es-openrouter-el-mercado-central-de-modelos.md)<br>• [03. Los modelos de referencia (DeepSeek, Claude, Gemini, GPT)](docs/12-el-ecosistema-de-herramientas-y-harnesses/03-los-modelos-de-referencia-deepseek-claude-gemini-gpt.md)<br>• [04. Editores: Cursor vs Antigravity vs Copilot](docs/12-el-ecosistema-de-herramientas-y-harnesses/04-editores-y-entornos-cursor-vs-antigravity-vs-copilot.md)<br>• [05. Agentes de Terminal: Claude Code y Hermes](docs/12-el-ecosistema-de-herramientas-y-harnesses/05-agentes-de-terminal-claude-code-y-hermes.md)<br>• [06. Orquestación Multiagente y la Nube (Orca)](docs/12-el-ecosistema-de-herramientas-y-harnesses/06-orquestacion-multiagente-y-plataformas-en-la-nube-orca.md) |
 
 ---
 
@@ -93,6 +95,7 @@ No te dejamos solo con la teoría. Hemos incluido archivos listos para usar en t
 
 ## 📌 Hojas de Consulta Rápida (`cheat-sheets/`)
 
+* 🗺️ **[`mapa-del-ecosistema-ia.md`](cheat-sheets/mapa-del-ecosistema-ia.md)**: Cuadro de mando comparativo de IDEs (Cursor, Antigravity), modelos (DeepSeek, Claude, Gemini) y plataformas (OpenRouter).
 * 📖 **[`diccionario-dev-para-todos.md`](cheat-sheets/diccionario-dev-para-todos.md)**: Glosario sin enredos de términos técnicos comunes (API, JWT, Webhook, Mock, Transacción, DNS, etc.).
 * 📊 **[`plantillas-diagramas-mermaid.md`](cheat-sheets/plantillas-diagramas-mermaid.md)**: Diagramas visuales en texto listos para pegar en tu documentación.
 * 💬 **[`prompts-de-control-arquitectonico.md`](cheat-sheets/prompts-de-control-arquitectonico.md)**: Fórmulas exactas para dar instrucciones firmes a la IA y evitar que tome atajos mediocres.
