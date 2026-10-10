@@ -1,0 +1,54 @@
+# ==============================================================================
+# 🤖 PLANTILLA DE INTEGRACIÓN CONTINUA (CI) PARA GITHUB ACTIONS
+# ==============================================================================
+# Copia este archivo en tu proyecto en: .github/workflows/ci.yml
+# Se ejecutará automáticamente en cada 'git push' o 'pull request' de forma gratuita.
+# ==============================================================================
+
+name: Inspección de Calidad (Quality Gate CI)
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  auditoria-de-calidad:
+    name: Quality Gate & Auditoría de Secretos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Descargar Código del Repositorio
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar Entorno Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 3. Instalar Dependencias Limpias
+        run: |
+          if [ -f "package-lock.json" ]; then
+            npm ci
+          elif [ -f "package.json" ]; then
+            npm install
+          fi
+
+      - name: 4. Escaneo Preventivo de Secretos (Zero-Trust)
+        run: |
+          echo "Buscando posibles credenciales filtradas..."
+          if grep -rnE "sk_live_[0-9a-zA-Z]{24}|ghp_[0-9a-zA-Z]{36}|AIzaSy[0-9a-zA-Z_-]{33}" src/ 2>/dev/null; then
+            echo "🚨 ERROR DE SEGURIDAD: Se detectó una clave de producción expuesta en el código."
+            exit 1
+          fi
+          echo "✔ Cero secretos expuestos."
+
+      - name: 5. Ejecutar Quality Gate del Proyecto
+        run: |
+          if [ -f "scripts/quality_gate.ts" ] || [ -f "scripts/quality_gate.js" ]; then
+            npm run quality-gate
+          elif npm run | grep -q "test"; then
+            npm test
+          fi

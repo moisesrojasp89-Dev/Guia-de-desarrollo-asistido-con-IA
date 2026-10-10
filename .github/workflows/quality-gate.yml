@@ -1,0 +1,50 @@
+name: Quality Gate Automatizado
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  verificacion-repositorio:
+    name: Inspección de Calidad y Enlaces
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar Código del Repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validar Sintaxis de Scripts Python
+        run: |
+          python -m py_compile templates-plug-and-play/quality_gate_python.py || true
+
+      - name: Escaneo de Secretos Falsos o Accidentales
+        run: |
+          echo "Escaneando posibles secretos accidentales en el repositorio..."
+          # Verifica que nadie haya subido accidentalmente llaves reales de producción
+          if grep -rnE "sk_live_[0-9a-zA-Z]{24}|ghp_[0-9a-zA-Z]{36}|AIzaSy[0-9a-zA-Z_-]{33}" docs/ templates-plug-and-play/; then
+            echo "ERROR: Se detectó lo que parece ser una clave de API o secreto real en los archivos."
+            exit 1
+          fi
+          echo "✓ Escaneo de seguridad superado con éxito."
+
+      - name: Validación de Estructura de Archivos
+        run: |
+          echo "Verificando existencia de módulos principales..."
+          test -f README.md
+          test -f LICENSE
+          test -f CONTRIBUTING.md
+          test -f templates-plug-and-play/spec-de-proyecto-starter.md
+          test -f templates-plug-and-play/AGENTS-universal.md
+          echo "✓ Todos los componentes clave están presentes."

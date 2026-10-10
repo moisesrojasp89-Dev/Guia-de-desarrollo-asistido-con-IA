@@ -1,0 +1,70 @@
+# ==============================================================================
+# 🐳 DOCKER COMPOSE ULTRA-LIGERO PARA COMPUTADORAS DE 4GB A 8GB DE RAM
+# ==============================================================================
+# Filosofía: Límites estrictos de memoria por contenedor para evitar que Docker
+# Desktop congele Windows o Mac. Consume menos de 350MB de RAM en total.
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  # 1. BASE DE DATOS POSTGRESQL OPTIMIZADA PARA BAJO CONSUMO (<120MB RAM)
+  postgres_liviano:
+    image: postgres:16-alpine
+    container_name: bd_low_ram
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password_segura_local_123
+      POSTGRES_DB: app_db
+    command: >
+      postgres 
+      -c shared_buffers=32MB 
+      -c work_mem=2MB 
+      -c max_connections=20 
+      -c maintenance_work_mem=16MB
+    ports:
+      - "5432:5432"
+    volumes:
+      - datos_postgres:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 150M # Docker matará el proceso si intenta consumir más de 150MB
+
+  # 2. CACHÉ EN MEMORIA REDIS ULTRA-RESTRINGIDO (<50MB RAM)
+  redis_liviano:
+    image: redis:7-alpine
+    container_name: redis_low_ram
+    restart: unless-stopped
+    command: redis-server --maxmemory 48mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+
+  # 3. BACKEND DE LA APLICACIÓN (NODE / PYTHON) (<150MB RAM)
+  app_backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend_low_ram
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://admin:password_segura_local_123@postgres_liviano:5432/app_db
+      REDIS_URL: redis://redis_liviano:6379
+      NODE_ENV: development
+    depends_on:
+      - postgres_liviano
+      - redis_liviano
+    deploy:
+      resources:
+        limits:
+          memory: 180M
+
+volumes:
+  datos_postgres:
