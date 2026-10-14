@@ -27,17 +27,22 @@ jobs:
 
       - name: Validar Sintaxis de Scripts Python
         run: |
-          python -m py_compile templates-plug-and-play/quality_gate_python.py || true
+          python -m py_compile templates-plug-and-play/quality_gate_python.py
 
-      - name: Escaneo de Secretos Falsos o Accidentales
+      - name: Escaneo de Secretos en Texto Plano
         run: |
           echo "Escaneando posibles secretos accidentales en el repositorio..."
-          # Verifica que nadie haya subido accidentalmente llaves reales de producción
-          if grep -rnE "sk_live_[0-9a-zA-Z]{24}|ghp_[0-9a-zA-Z]{36}|AIzaSy[0-9a-zA-Z_-]{33}" docs/ templates-plug-and-play/; then
+          # Ignoramos archivos binarios y directorios de caché de python
+          if grep -rnEI --exclude-dir=__pycache__ --exclude-dir=.git --exclude="*.pyc" "sk_live_[0-9a-zA-Z]{24}|ghp_[0-9a-zA-Z]{36}|AIzaSy[0-9a-zA-Z_-]{33}" docs/ templates-plug-and-play/; then
             echo "ERROR: Se detectó lo que parece ser una clave de API o secreto real en los archivos."
             exit 1
           fi
           echo "✓ Escaneo de seguridad superado con éxito."
+
+      - name: Ejecutar Quality Gate Python con Auto-Prueba
+        run: |
+          python templates-plug-and-play/quality_gate_python.py --self-test
+          python templates-plug-and-play/quality_gate_python.py
 
       - name: Validación de Estructura de Archivos
         run: |

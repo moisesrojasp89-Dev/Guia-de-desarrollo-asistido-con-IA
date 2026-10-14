@@ -25,6 +25,7 @@ import os
 import re
 import sys
 import time
+import base64
 import py_compile
 import subprocess
 from pathlib import Path
@@ -60,8 +61,9 @@ def ejecutar_self_test():
     
     # 1. Prueba de detección de secretos
     patron_prueba = re.compile(r"sk_live_[0-9a-zA-Z]{24,}")
-    # Armamos la cadena concatenada para no auto-disparar el escáner de archivos
-    string_falso = "const stripeKey = '" + "sk_live_" + "1234567890abcdef12345678';"
+    # Decodificamos en tiempo de ejecución para evitar que el compilador integre el secreto en bytecode .pyc
+    prefijo = base64.b64decode(b"c2tfbGl2ZV8=").decode("utf-8")
+    string_falso = f"const stripeKey = '{prefijo}1234567890abcdef12345678';"
     if patron_prueba.search(string_falso):
         print(f"  {GREEN}✔{RESET} Verificación negativa de secretos: FUNCIONA (patrón detectado correctamente).")
     else:
