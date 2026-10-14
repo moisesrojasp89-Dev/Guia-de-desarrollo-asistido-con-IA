@@ -39,13 +39,46 @@ Incluso si un usuario malicioso abre la consola del navegador con F12 y ejecuta 
 
 ---
 
-## ⚖️ El Principio de Mínimo Privilegio
+## ⚠️ El Peligro de Copiar Scripts SQL y la Alucinación de la IA
 
-La regla de oro de la seguridad en bases de datos es:  
-**Nunca le des a un componente más permisos de los estrictamente necesarios para hacer su trabajo.**
+Hay una diferencia fundamental entre equivocarse en JavaScript/Python y equivocarse en SQL:
+* En **JavaScript/Python**, un error suele arrojar una excepción (`ReferenceError`, `SyntaxError`) y el programa simplemente se detiene.
+* En **SQL**, un error puede **destruir permanentemente datos en disco**, bloquear el acceso a todos los usuarios legítimos o dejar la base de datos abierta al mundo **sin arrojar ningún error visible en pantalla**.
 
-1. **Lectura Pública:** Si tienes un blog, cualquiera puede leer los artículos (`FOR SELECT USING (true)`).
-2. **Creación con Identidad:** Al crear un comentario, el autor no puede fingir ser otro usuario (`WITH CHECK (auth.uid() = usuario_id)`).
-3. **Escritura Administrativa:** Solo usuarios con el rol `'admin'` pueden cambiar el precio de un producto o eliminar un registro.
+> [!CAUTION]
+> **Nunca trates los scripts SQL como piezas mágicas de "copiar y pegar a ciegas".**  
+> Cada aplicación tiene modelos de datos, relaciones de claves y nombres de columnas únicos. Copiar un script de internet o de una IA sin auditarlo puede arruinar tu proyecto en segundos.
 
-Cuando activas RLS desde el día 1, duermes con la absoluta tranquilidad de que tus datos están blindados a nivel de motor.
+### Las 4 Trampas Silenciosas que la IA Suele Cometer en SQL:
+
+1. **La Falsa Autorización en RLS (`auth.uid() IS NOT NULL`):**  
+   Muchos modelos de IA intentan "hacer que el código funcione" escribiendo:
+   ```sql
+   -- ❌ TRAMPA MORTAL: Esto solo verifica si el usuario inició sesión.
+   -- ¡Le permite a cualquier cliente registrado descargar las facturas de TODOS los demás!
+   USING (auth.uid() IS NOT NULL);
+   
+   -- ✔️ REGLA CORRECTA: Verifica propiedad estricta de la fila.
+   USING (auth.uid() = usuario_id);
+   ```
+2. **El Olvido de Activar RLS (`ENABLE ROW LEVEL SECURITY`):**  
+   Si creas 10 políticas con `CREATE POLICY`, pero olvidas ejecutar `ALTER TABLE tu_tabla ENABLE ROW LEVEL SECURITY;`, **PostgreSQL ignora todas las políticas** y la tabla sigue siendo 100% pública.
+3. **Sentencias de Modificación sin Filtro (`UPDATE` / `DELETE` sin `WHERE`):**  
+   Al pedirle a la IA una corrección o actualización de un registro, a veces propone sentencias que, si no tienen un `WHERE` estricto, modifican o borran la tabla entera.
+4. **Destrucción de Columnas sin Respaldo (`DROP COLUMN`):**  
+   Si le pides a la IA refactorizar un campo, suele sugerir borrar la columna vieja directamente, destruyendo los datos históricos de tus usuarios existentes.
+
+---
+
+## 📋 Protocolo de Seguridad del Ingeniero Asistido por IA
+
+Antes de ejecutar cualquier script SQL en tu proyecto:
+
+1. **El Entorno Aislado (Sandbox Obligatorio):**  
+   NUNCA ejecutes un script SQL directamente en tu base de datos de producción con clientes reales. Pruébalo siempre primero en un contenedor local de Docker o en un proyecto de prueba secundario y descartable.
+2. **Copia de Seguridad Previa (Dump):**  
+   Antes de correr cualquier migración o script manual, descarga un respaldo completo de tu base de datos (`pg_dump` o el botón de backup de tu proveedor). Si algo falla, puedes restaurar en minutos.
+3. **Ejecuta Pruebas Negativas:**  
+   No te limites a verificar que tu usuario administrador puede ver sus datos. Simula ser un usuario anónimo o un cliente ajeno y **confirma activamente que el motor de base de datos le bloquea el acceso**.
+
+> 💡 *Para ver un modelo didáctico de cómo estructurar estas reglas y pruebas negativas, consulta el [Modelo de Referencia RLS](file:///c:/Users/indatech/Desktop/Manual%20para%20Desarrollo%20Asistido%20con%20IA/templates-plug-and-play/supabase-rls-starter.sql).*

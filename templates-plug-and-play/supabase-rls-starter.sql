@@ -1,21 +1,44 @@
 -- ==============================================================================
--- 🔐 PLANTILLA STARTER DE ROW LEVEL SECURITY (RLS) PARA POSTGRESQL / SUPABASE
+-- 🔐 MODELO DIDÁCTICO DE REFERENCIA: ROW LEVEL SECURITY (RLS) EN POSTGRESQL
 -- ==============================================================================
--- 📋 QUÉ CUBRE ESTA PLANTILLA:
--- • Aislamiento estricto entre usuarios: cada persona solo ve y edita sus datos.
+-- ⚠️ AVISO LEGAL Y TÉCNICO OBLIGATORIO — LEER ANTES DE USAR
+-- ==============================================================================
+-- 1. ESTE ARCHIVO ES UN MODELO DIDÁCTICO DE APRENDIZAJE, NO UNA PLANTILLA
+--    GENÉRICA PARA COPIAR Y PEGAR DIRECTAMENTE EN UNA BASE DE DATOS DE PRODUCCIÓN.
+--
+-- 2. Cada aplicación tiene un esquema de datos, nombres de tablas, relaciones
+--    y reglas de negocio únicos. Ejecutar scripts SQL a ciegas en producción
+--    puede provocar:
+--    • Pérdida irreparable de datos por borrados accidentales o conflictos de claves.
+--    • Bloqueo inmediato del acceso a todos tus usuarios por políticas restrictivas mal diseñadas.
+--    • Fugas masivas de privacidad si tus columnas de usuario no coinciden exactamente.
+--
+-- 3. EXENCIÓN DE RESPONSABILIDAD:
+--    Los autores y colaboradores de este repositorio no asumen responsabilidad
+--    alguna por pérdidas de datos, incidentes de seguridad, caídas de servicio
+--    o daños directos o indirectos derivados del uso, copia o adaptación de
+--    este archivo. Es tu responsabilidad estricta auditar, comprender y probar
+--    cada instrucción antes de tocar datos reales.
+--
+-- 4. REGLA SAGRADA DEL DESARROLLADOR:
+--    NUNCA ejecutes este ni ningún otro script SQL en una base de datos con usuarios
+--    reales sin haberlo probado previamente en un entorno local aislado (como
+--    PostgreSQL en Docker) o en un proyecto de pruebas descartable.
+-- ==============================================================================
+-- 📋 CONCEPTOS ILUSTRADOS EN ESTE MODELO DIDÁCTICO:
+-- • Aislamiento estricto entre usuarios: cada persona solo ve y edita sus filas.
 -- • Restricción de inserción: ningún usuario puede crear registros a nombre de otro.
 -- • Tabla privada para webhooks: cero acceso desde el frontend (clave anónima).
 --
--- ⚠️ QUÉ NO CUBRE (LÍMITES Y ADVERTENCIAS CRÍTICAS):
--- • Clave Service Role: Si usas 'service_role_key' en el frontend, esta clave
---   ignora RLS por completo. Esta clave NUNCA debe salir del backend privado.
--- • Funciones SECURITY DEFINER: Las funciones creadas con este modificador se
---   ejecutan con permisos de superusuario y se saltan RLS a menos que pongas filtros.
--- • Índices de Rendimiento: RLS filtra filas pero no acelera la consulta. Es
---   obligatorio crear índices (ej: CREATE INDEX ON pedidos(usuario_id)).
+-- ⚠️ LÍMITES CRÍTICOS QUE DEBES ENTENDER:
+-- • Clave Service Role: Si expones la 'service_role_key' en el frontend (navegador),
+--   esta clave ignora RLS por completo. La clave de servicio NUNCA debe salir del backend.
+-- • Funciones SECURITY DEFINER: Se ejecutan con permisos de superusuario y se saltan RLS
+--   a menos que agregues filtros manuales.
+-- • Índices: RLS filtra filas pero no las indexa. Siempre crea índices en tus foreign keys.
 -- ==============================================================================
 
--- 1. TABLA DE PERFILES DE USUARIO
+-- 1. EJEMPLO: TABLA DE PERFILES DE USUARIO
 CREATE TABLE IF NOT EXISTS perfiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     email TEXT NOT NULL UNIQUE,
@@ -24,16 +47,16 @@ CREATE TABLE IF NOT EXISTS perfiles (
     creado_en TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
--- Habilitamos RLS obligatoriamente
+-- Habilitamos RLS obligatoriamente en la tabla
 ALTER TABLE perfiles ENABLE ROW LEVEL SECURITY;
 
--- Política 1: Cualquier usuario autenticado puede leer su propio perfil
+-- Política Didáctica 1: Cualquier usuario autenticado puede leer ÚNICAMENTE su propio perfil
 CREATE POLICY "Los usuarios pueden ver su propio perfil"
 ON perfiles
 FOR SELECT
 USING (auth.uid() = id);
 
--- Política 2: Los usuarios pueden actualizar únicamente su propio perfil
+-- Política Didáctica 2: Los usuarios pueden actualizar ÚNICAMENTE su propio perfil
 CREATE POLICY "Los usuarios pueden actualizar su propio perfil"
 ON perfiles
 FOR UPDATE
@@ -42,7 +65,7 @@ WITH CHECK (auth.uid() = id);
 
 
 -- ==============================================================================
--- 2. TABLA DE PEDIDOS / TRANSACCIONES
+-- 2. EJEMPLO: TABLA DE PEDIDOS / TRANSACCIONES
 -- ==============================================================================
 CREATE TABLE IF NOT EXISTS pedidos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -53,7 +76,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
     creado_en TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
--- Índice esencial para que el filtrado por RLS sea sub-milisegundo
+-- Índice esencial para que el filtrado por RLS sea sub-milisegundo y no ahogue la CPU
 CREATE INDEX IF NOT EXISTS idx_pedidos_usuario_id ON pedidos(usuario_id);
 
 ALTER TABLE pedidos ENABLE ROW LEVEL SECURITY;
@@ -72,7 +95,7 @@ WITH CHECK (auth.uid() = usuario_id);
 
 
 -- ==============================================================================
--- 3. TABLA DE IDEMPOTENCIA (Para Webhooks de Stripe / Meta / WhatsApp)
+-- 3. EJEMPLO: TABLA PRIVADA DE IDEMPOTENCIA (Para Webhooks de Stripe / Meta)
 -- ==============================================================================
 CREATE TABLE IF NOT EXISTS eventos_procesados (
     id TEXT PRIMARY KEY, -- wamid de WhatsApp o evt_id de Stripe
@@ -83,16 +106,16 @@ CREATE TABLE IF NOT EXISTS eventos_procesados (
 ALTER TABLE eventos_procesados ENABLE ROW LEVEL SECURITY;
 
 -- Esta tabla NO tiene políticas para 'anon' ni 'authenticated'.
--- Por definición en PostgreSQL, RLS activado sin políticas = ACCESO DENEGADO (0 filas)
--- para cualquier usuario que intente consultarla desde el navegador con la tecla F12.
--- Solo el backend privado con 'service_role' puede insertar y leer aquí.
+-- En PostgreSQL, RLS activado sin políticas = ACCESO TOTALMENTE DENEGADO (0 filas)
+-- para cualquier usuario que intente consultarla desde el navegador o la tecla F12.
+-- Solo tu backend seguro con 'service_role' tiene autorización para leer o insertar aquí.
 
 
 -- ==============================================================================
--- 🧪 SUITE DE PRUEBAS DE SEGURIDAD (CÓMO COMPROBAR QUE FUNCIONA)
+-- 🧪 SUITE DE PRUEBAS DE SEGURIDAD (CÓMO VERIFICAR EN ENTORNO DE PRUEBAS)
 -- ==============================================================================
--- Copia y corre estas pruebas en el SQL Editor de Supabase para validar que
--- las restricciones no son ilusorias:
+-- Ejecuta estas pruebas en un proyecto de prueba descartable para comprobar
+-- que el aislamiento no es ilusorio:
 
 /*
 -- PRUEBA NEGATIVA 1: Usuario Anónimo (Sin login) intenta leer pedidos
@@ -102,7 +125,6 @@ SELECT * FROM pedidos;
 -- Retorna: 0 filas.
 
 -- PRUEBA NEGATIVA 2: Usuario A intenta leer los pedidos del Usuario B
--- Supongamos que simulamos ser el usuario '11111111-1111-1111-1111-111111111111'
 SET ROLE authenticated;
 SET request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
 
@@ -115,6 +137,6 @@ INSERT INTO pedidos (usuario_id, titulo, monto_centavos)
 VALUES ('22222222-2222-2222-2222-222222222222', 'Hack de pedido', 1000);
 -- Resultado esperado: ERROR: new row violates row-level security policy for table "pedidos"
 
--- Restaurar permisos de superusuario para seguir administrando:
+-- Restaurar permisos de superusuario para seguir administrando tu base de pruebas:
 RESET ROLE;
 */

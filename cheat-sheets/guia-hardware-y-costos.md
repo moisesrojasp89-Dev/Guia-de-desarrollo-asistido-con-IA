@@ -44,3 +44,8 @@
 ## 💡 El Mandamiento Financiero del Constructor
 > **Nunca contrates un servicio de pago en la Etapa 1 si existe una alternativa gratuita en la nube que resuelva el problema para tus primeros 100 usuarios.**  
 > Deja que tus primeros clientes que pagan financien la infraestructura de tu empresa.
+
+> [!WARNING]
+> **Cuidado con las sorpresas del "Pago por Consumo" (Pay-as-you-go):**  
+> Si usas plataformas serverless sin límites duros de facturación (*Spend Cap*), un bucle infinito en tu código o un ataque de bots puede disparar tu factura a miles de dólares en un fin de semana.  
+> 📖 Para blindar tu dinero con una arquitectura desacoplada de costo fijo ($5/mes), lee: **[La Trampa del Pago por Uso](../docs/12-infraestructura-explicada-con-manzanas/06-la-trampa-del-pago-por-uso-y-arquitectura-desacoplada.md)**.
