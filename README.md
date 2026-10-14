@@ -127,7 +127,7 @@ flowchart TD
 Todas las plantillas han sido verificadas con pruebas negativas e incluyen advertencias explícitas sobre **qué detectan y qué NO detectan**:
 
 * 📄 **[`spec-de-proyecto-starter.md`](templates-plug-and-play/spec-de-proyecto-starter.md)**: Plantilla para diseñar tu aplicación y definir límites antes de abrir el chat de IA.
-* 🤖 **[`AGENTS-universal.md`](templates-plug-and-play/AGENTS-universal.md)**: Arnés universal de instrucciones con mapeo por editor (Cursor, Claude Code, Copilot, Antigravity).
+* 🤖 **[`AGENTS-universal.md`](templates-plug-and-play/AGENTS-universal.md)**: Arnés base evolutivo de gobernanza (starter kit modular, no dogmático) con mapeo por editor (Cursor, Claude Code, Copilot, Antigravity).
 * 📓 **[`self_learning_error_catalog.md`](templates-plug-and-play/self_learning_error_catalog.md)**: Formato estructurado 5-Whys para registrar fallas y evitar que la IA repita errores pasados.
 * 🐍 **[`quality_gate_python.py`](templates-plug-and-play/quality_gate_python.py)**: Script en Python con modo `--self-test` para auditar tipos, sintaxis, secretos expuestos y tests en menos de 1 segundo.
 * ⚡ **[`quality_gate_node.ts`](templates-plug-and-play/quality_gate_node.ts)**: Script equivalente para TypeScript/Node.js con análisis estático y escaneo de credenciales.
