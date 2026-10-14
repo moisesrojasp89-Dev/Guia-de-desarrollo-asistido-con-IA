@@ -53,7 +53,26 @@ flowchart TD
 
 ---
 
-## 💡 Resultados Tangibles de este Método
-1. **Velocidad de Respuesta:** Los modelos ligeros responden en menos de un segundo, permitiéndote iterar sin esperas molestas.
-2. **Costo Casi Cero:** Reduces tu gasto de tokens en un 80% o más.
-3. **Calidad Superior:** Obtienes la profundidad analítica de los modelos más avanzados justo en los momentos en que realmente importa.
+## ⚠️ La Trampa de los Reintentos (The Retry Tax)
+
+No caigas en la trampa simplista de pensar que usar el modelo más barato siempre ahorra dinero:
+
+> **Un modelo económico que cuesta 10 veces menos pero necesita 5 intentos fallidos, genera código con errores y te hace perder 20 minutos corrigiendo, termina saliendo mucho más caro que un modelo de frontera que resuelve el problema en una sola llamada.**
+
+El coste real de una tarea depende de:
+- **Tokens de entrada y salida acumulados** (sumando todos los reintentos).
+- **Longitud del contexto** (si el chat se alarga, cada llamada envía más tokens repetidos).
+- **Tasa de éxito a la primera (First-Pass Accuracy).**
+- **Tu tiempo humano** revisando y depurando código defectuoso.
+
+---
+
+## 📊 Metodología de Medición Empírica
+
+En lugar de asumir ahorros mágicos en el vacío, aplica esta sencilla metodología de evaluación:
+
+1. **Aísla una tarea concreta:** Por ejemplo, *"escribir un conversor de fechas con 5 casos de prueba"*.
+2. **Evalúa con el modelo ligero:** Registra si pasó las pruebas al primer intento, cuántos tokens consumió y cuánto tardó.
+3. **Evalúa con el modelo de frontera:** Registra los mismos datos.
+4. **Analiza el balance real:** Si el modelo ligero pasa la prueba en 1 o 2 llamadas, es la opción ganadora. Si tropieza más de 3 veces, eleva la tarea al modelo más capaz sin dudarlo.
+

@@ -56,3 +56,17 @@ Imagina que un cliente acaba de pagar un curso o comprar una entrada, y tu siste
    - Si el proveedor está caído: espera 1 minuto y lo vuelve a intentar automáticamente.
 
 **Resultado:** Cero correos perdidos, cero cancelaciones traumáticas y una experiencia fluida e invulnerable para tus usuarios.
+
+---
+
+## ⚖️ ¿Cuándo Usarlo y Cuándo es Sobre-Ingeniería?
+
+La arquitectura profesional no consiste en usar la mayor cantidad de patrones sofisticados; consiste en **usar la solución mínima proporcional a tu problema**:
+
+| Pregunta Clave | Circuit Breaker | Patrón Outbox |
+|---|---|---|
+| **¿Qué problema resuelve?** | Evita que tu servidor colapse esperando a un servicio externo que está caído. | Evita perder mensajes o correos cuando la compra ya ocurrió pero la red externa falló. |
+| **¿En qué situación merece la pena?** | Tráfico mediano/alto (más de 50 peticiones por minuto) o llamadas continuas a LLMs. | Cuando el evento posterior (correo, webhook, factura) es vital para el negocio y no puede perderse. |
+| **¿Cuándo NO debes usarlo?** | En un MVP inicial, blogs, páginas con pocas visitas al día o prototipos. | En apps donde no hay pagos ni entregas críticas (ej. un formulario de sugerencias). |
+| **¿Qué alternativa sencilla existe?** | **Un simple `timeout` estricto:** Configura tu petición HTTP con `timeout: 5000` (5 segundos) y un `try/catch` que muestre un mensaje de error amigable si vence el tiempo. | **Reintento directo simple:** Si el envío de correo falla, loguea el error en consola y responde con éxito de compra advirtiendo que el recibo puede tardar unos minutos. |
+

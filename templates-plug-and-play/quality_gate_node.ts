@@ -1,11 +1,19 @@
 /**
  * 🛡️ Quality Gate Universal para Proyectos Node.js / TypeScript
  *
- * Audita invariantes de ingeniería en < 3 segundos:
- * 1. Validación de Tipos y AST (tsc --noEmit, 0 errores).
- * 2. Escaneo de Secretos Expuestos (Zero-Trust).
- * 3. Integridad de Entorno (.env vs .gitignore vs .env.example).
- * 4. Suite de Pruebas Unitarias Deterministas (Vitest / Jest / Node Test).
+ * ==============================================================================
+ * 📋 QUÉ DETECTA ESTE SCRIPT:
+ * • Validación de tipos estáticos y AST (tsc --noEmit, 0 errores, 0 warnings).
+ * • Detección de patrones de API Keys mediante Regex (Stripe, GitHub, Google, Supabase).
+ * • Fuga de entorno: verifica que .env esté protegido en .gitignore.
+ * • Ejecución y verificación de la suite de pruebas automatizadas (npm test).
+ *
+ * ⚠️ QUÉ NO DETECTA (LÍMITES DE INGENIERÍA):
+ * • NO detecta errores de lógica de negocio o cálculos matemáticos incorrectos.
+ * • NO garantiza cobertura si los tests no evalúan casos límite o excepciones.
+ * • NO detecta credenciales si están ofuscadas o divididas en variables dinámicas.
+ * • Salida 0 significa "invariantes estáticas superadas", no ausencia total de bugs.
+ * ==============================================================================
  */
 
 import { spawn } from 'node:child_process';

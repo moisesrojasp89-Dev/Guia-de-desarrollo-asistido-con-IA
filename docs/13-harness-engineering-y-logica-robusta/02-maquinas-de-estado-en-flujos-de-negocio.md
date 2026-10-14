@@ -46,3 +46,19 @@ Al forzar una máquina de estados por código en tu backend:
   }
   ```
 - Tu lógica de negocio permanece 100% incorruptible.
+
+---
+
+## ⚖️ ¿Cuándo Usarlo y Cuándo es Sobre-Ingeniería?
+
+* **¿Cuándo vale la pena?**  
+  En procesos multi-paso que involucran dinero, contratos, reservas de citas o inventario físico (donde pasar al estado equivocado causa pérdidas económicas).
+* **¿Cuándo NO debes usarlo?**  
+  En flujos lineales sencillos de 1 o 2 pasos (por ejemplo: enviar un formulario de contacto o cambiar un nombre de usuario). No instales librerías pesadas como XState para un formulario común.
+* **Alternativa más simple:**  
+  Un simple enum o validación condicional con `if` en tu controlador:
+  ```javascript
+  const ESTADOS_VALIDOS = ['pendiente', 'pagado', 'cancelado'];
+  ```
+  Menos de 5 líneas de código, cero dependencias adicionales y total control.
+

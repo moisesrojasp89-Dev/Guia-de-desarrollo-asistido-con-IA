@@ -1,10 +1,20 @@
 /**
  * 🔏 Validador Criptográfico Universal de Webhooks (HMAC SHA-256)
  *
- * Protege tus endpoints contra ataques de falsificación y replay:
- * 1. Utiliza `crypto.timingSafeEqual` para evitar ataques de temporización (timing attacks).
- * 2. Requiere el cuerpo del mensaje en formato crudo (Raw Body / Buffer) antes de parsear JSON.
- * 3. Compatible con Meta (WhatsApp Cloud API), Stripe, GitHub y Shopify.
+ * ==============================================================================
+ * 📋 QUÉ GARANTIZA ESTA PLANTILLA:
+ * • Autenticidad: Demuestra matemáticamente que el mensaje fue emitido por el
+ *   proveedor oficial (Meta, Stripe, GitHub, Shopify) y no por un impostor.
+ * • Integridad: Comprueba que ni un solo carácter del cuerpo fue alterado.
+ * • Protección contra Timing Attacks: Usa `crypto.timingSafeEqual` en tiempo constante.
+ *
+ * ⚠️ QUÉ NO GARANTIZA (LÍMITES QUE TODO DESARROLLADOR DEBE SABER):
+ * • NO evita eventos duplicados: Validar la firma NO es lo mismo que evitar cobros dobles.
+ *   Para deduplicar necesitas el cerrojo de Idempotencia en base de datos.
+ * • NO protege contra ataques de repetición (Replay Attacks) por sí solo: Si un atacante
+ *   intercepta una petición válida y la reenvía 10 minutos después, la firma matemática
+ *   sigue siendo válida a menos que verifiques la marca de tiempo (timestamp).
+ * ==============================================================================
  */
 
 import crypto from 'node:crypto';
@@ -14,6 +24,11 @@ export interface OpcionesVerificacion {
   firmaRecibida: string;
   secretoWebhook: string;
   prefijoEsperado?: string; // Por ejemplo 'sha256=' en Meta / GitHub
+}
+
+export interface OpcionesVerificacionConTiempo extends OpcionesVerificacion {
+  timestampRecibido: string | number; // Marca de tiempo enviada en la cabecera
+  toleranciaSegundos?: number;        // Tolerancia máxima (ej: 300 segundos = 5 minutos)
 }
 
 /**
@@ -50,7 +65,7 @@ export function verificarFirmaHMAC({
       return false;
     }
 
-    // 3. timingSafeEqual evita que un atacante deduzca la clave midiendo milisegundos de respuesta
+    // 3. timingSafeEqual evita que un atacante deduzca la clave midiendo nanosegundos de respuesta
     return crypto.timingSafeEqual(bufferRecibido, bufferCalculado);
   } catch (error) {
     console.error('Error al verificar firma criptográfica:', error);
@@ -58,21 +73,53 @@ export function verificarFirmaHMAC({
   }
 }
 
-// Ejemplo de uso en un servidor Fastify / Express:
-/*
-app.post('/webhook', (req, res) => {
-  const firma = req.headers['x-hub-signature-256'] as string;
-  const esValido = verificarFirmaHMAC({
-    cuerpoCrudo: req.rawBody, // Importante: debe ser el Buffer original sin parsear
-    firmaRecibida: firma,
-    secretoWebhook: process.env.WEBHOOK_SECRET!
-  });
+/**
+ * Valida firma HMAC + marca de tiempo para prevenir ataques de repetición (Estilo Stripe).
+ */
+export function verificarFirmaConTimestamp({
+  cuerpoCrudo,
+  firmaRecibida,
+  secretoWebhook,
+  timestampRecibido,
+  toleranciaSegundos = 300, // 5 minutos por defecto
+}: OpcionesVerificacionConTiempo): boolean {
+  const tiempoActual = Math.floor(Date.now() / 1000);
+  const tiempoMensaje = Number(timestampRecibido);
 
-  if (!esValido) {
-    return res.status(401).send({ error: 'Firma criptográfica inválida. Impostor detectado.' });
+  // 1. Comprobación anti-replay: el mensaje no debe tener más de 5 minutos de antigüedad
+  if (isNaN(tiempoMensaje) || Math.abs(tiempoActual - tiempoMensaje) > toleranciaSegundos) {
+    console.warn('⚠️ Webhook rechazado por expiración de timestamp (posible ataque replay).');
+    return false;
   }
 
-  // Si es válido, procesamos el webhook de forma segura
-  return res.status(200).send({ status: 'ok' });
+  // 2. Concatenamos timestamp + cuerpo crudo según el protocolo oficial
+  const payloadConTiempo = `${tiempoMensaje}.${typeof cuerpoCrudo === 'string' ? cuerpoCrudo : cuerpoCrudo.toString('utf-8')}`;
+
+  return verificarFirmaHMAC({
+    cuerpoCrudo: payloadConTiempo,
+    firmaRecibida,
+    secretoWebhook,
+    prefijoEsperado: 'v1=', // Formato v1 de Stripe
+  });
+}
+
+// ==============================================================================
+// 🧪 CÓMO PROBAR QUE LA VERIFICACIÓN REALMENTE FALLA CUANDO DEBE FALLAR:
+// ==============================================================================
+/*
+// PRUEBA NEGATIVA 1: Firma alterada por un hacker
+const hackValido = verificarFirmaHMAC({
+  cuerpoCrudo: '{"evento":"pago_completado"}',
+  firmaRecibida: 'sha256=1234567890abcdeffalsificado0000000000000000000000000000000000000000',
+  secretoWebhook: 'mi_secreto_seguro_123'
 });
+console.log('Resultado (debe ser false):', hackValido); // false ✔
+
+// PRUEBA NEGATIVA 2: Cuerpo del mensaje modificado en tránsito
+const manipulado = verificarFirmaHMAC({
+  cuerpoCrudo: '{"evento":"pago_completado","monto":9999}', // Alguien infló el monto
+  firmaRecibida: 'sha256=' + hashOriginal, // Firma del mensaje sin el monto inflado
+  secretoWebhook: 'mi_secreto_seguro_123'
+});
+console.log('Resultado (debe ser false):', manipulado); // false ✔
 */
