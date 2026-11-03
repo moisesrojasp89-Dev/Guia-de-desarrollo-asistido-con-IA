@@ -12,6 +12,15 @@
 
 ---
 
+## 🗺️ Mapa de Conocimiento del Repositorio (Progressive Disclosure)
+*Antes de ejecutar una tarea, consulta únicamente la constitución especializada que corresponda al área que vas a tocar:*
+
+* 📄 **Especificación de Negocio (`SPEC.md`):** Léelo antes de crear nuevos módulos, rutas o tablas.
+* 🎨 **Constitución Visual (`UI_UX.md`):** Léelo **obligatoriamente** si vas a tocar HTML, CSS, layouts, navbars o componentes de frontend (Cero `!important`, 100% tokens, Contenedor Sagrado centrado).
+* 🔐 **Constitución de Ciberseguridad (`SECURITY.md`):** Léelo **obligatoriamente** si vas a tocar autenticación, endpoints de API, consultas SQL/ORM, subida de archivos, Docker/VPS o integraciones con LLMs.
+
+---
+
 ## 🟢 Bloque 1: Guardrails Mínimos Universales (Sentido Común y Seguridad)
 *Estas reglas aplican prácticamente a cualquier proyecto para evitar degradación de código y riesgos de seguridad:*
 
