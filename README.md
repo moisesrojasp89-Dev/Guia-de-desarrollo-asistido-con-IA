@@ -160,16 +160,20 @@ Todas las plantillas han sido verificadas con pruebas negativas e incluyen adver
 
 ## 🚀 Cómo Empezar a Usar Esta Guía Hoy Mismo
 
-1. **Si vas a iniciar una idea desde cero:**  
-   Ve directamente al **[Módulo 01: Antes del Código](docs/01-antes-del-codigo-diseno-y-arquitectura/01-la-regla-de-oro-no-abras-el-chat-a-ciegas.md)** y copia la plantilla [`spec-de-proyecto-starter.md`](templates-plug-and-play/spec-de-proyecto-starter.md). Llena los 4 pasos antes de dialogar con la IA.
-2. **Si tienes miedo de que la IA rompa tu código:**  
-   Aprende de inmediato el flujo de guardado en el **[Módulo 02: Git y Recuperación](docs/02-git-y-recuperacion-tu-red-de-seguridad/01-git-sin-tecnicismos-el-punto-de-guardado.md)**.
-3. **Si ya tienes un proyecto en marcha que se siente frágil o desordenado:**  
-   Lee el **[Módulo 06: Gobernanza del Asistente](docs/06-gobernanza-del-asistente-agents-md/01-que-es-un-harness-de-instrucciones.md)** y coloca [`AGENTS-universal.md`](templates-plug-and-play/AGENTS-universal.md) en la raíz de tu proyecto.
-4. **Si vas a conectar usuarios, bases de datos o pasarelas de pago:**  
-   Revisa el **[Módulo 10: Triángulo de Seguridad](docs/10-el-triangulo-de-seguridad-defensiva/01-seguridad-en-la-web-f12-xss-y-cero-fugas.md)** y el **[Módulo 11: Resiliencia de Datos](docs/11-resiliencia-de-datos-en-el-mundo-real/01-que-es-un-webhook-el-timbre-de-tu-casa.md)**.
-5. **Si te preocupa que una factura en la nube o un ataque arruine tu bolsillo:**  
-   Revisa **[La Trampa del Pago por Uso y la Arquitectura Desacoplada](docs/12-infraestructura-explicada-con-manzanas/06-la-trampa-del-pago-por-uso-y-arquitectura-desacoplada.md)** para blindar tu tarjeta de crédito con un VPS de costo fijo ($5/mes).
+Este repositorio cumple **dos funciones simultáneas**: es tu **manual de consulta paso a paso** y tu **fábrica de proyectos (*Starter Kit*)**. Según lo que necesites hoy, elige tu puerta de entrada:
+
+1. **⚡ Si quieres arrancar un proyecto nuevo blindado en 10 minutos:**  
+   Ve directo a **[El Ritual de Despegue en 10 Minutos](docs/14-sistemas-agenticos-de-produccion-y-casos-reales/05-el-ritual-de-despegue-tu-proximo-proyecto-en-10-minutos.md)** y copia en la raíz de tu nuevo proyecto la **Tríada Constitucional**: [`spec-de-proyecto-starter.md`](templates-plug-and-play/spec-de-proyecto-starter.md), [`AGENTS-universal.md`](templates-plug-and-play/AGENTS-universal.md), [`UI_UX.md`](templates-plug-and-play/UI_UX.md) y [`SECURITY.md`](templates-plug-and-play/SECURITY.md).
+2. **📝 Si tienes una idea desde cero y aún no sabes cómo estructurarla:**  
+   Empieza por el **[Módulo 01: Antes del Código](docs/01-antes-del-codigo-diseno-y-arquitectura/01-la-regla-de-oro-no-abras-el-chat-a-ciegas.md)** para diseñar tus flujos y tablas en servilleta antes de abrir el chat de IA.
+3. **🛡️ Si tienes miedo de que la IA rompa lo que ya funciona:**  
+   Domina el flujo de puntos de guardado en el **[Módulo 02: Git y Recuperación](docs/02-git-y-recuperacion-tu-red-de-seguridad/01-git-sin-tecnicismos-el-punto-de-guardado.md)**.
+4. **🎨 Si la IA siempre desordena tus estilos CSS o mete `!important`:**  
+   Revisa el **[Módulo 07: Diseño UI/UX & Harness Visual](docs/07-diseno-ui-ux-para-vibe-coders/05-harness-ui-ux-la-ley-de-cero-important-y-cascada-natural.md)** e importa [`harness-design-system.css`](templates-plug-and-play/harness-design-system.css).
+5. **🔐 Si vas a conectar usuarios reales, bases de datos, VPS o pasarelas de pago:**  
+   Aplica el **[Módulo 10: Ciberseguridad Defensiva y Hardening](docs/10-el-triangulo-de-seguridad-defensiva/01-seguridad-en-la-web-f12-xss-y-cero-fugas.md)** y el **[Módulo 11: Resiliencia de Datos](docs/11-resiliencia-de-datos-en-el-mundo-real/01-que-es-un-webhook-el-timbre-de-tu-casa.md)**.
+6. **💰 Si te preocupa que una factura en la nube o un ataque de bots arruine tu bolsillo:**  
+   Lee **[La Trampa del Pago por Uso](docs/12-infraestructura-explicada-con-manzanas/06-la-trampa-del-pago-por-uso-y-arquitectura-desacoplada.md)** y **[Defensa ante Denial of Wallet](docs/10-el-triangulo-de-seguridad-defensiva/09-seguridad-en-la-era-de-agentes-prompt-injection-y-denial-of-wallet.md)**.
 
 ---
 
